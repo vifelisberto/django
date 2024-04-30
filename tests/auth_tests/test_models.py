@@ -139,6 +139,14 @@ class UserManagerTestCase(TransactionTestCase):
         with self.assertRaisesMessage(ValueError, "The given username must be set"):
             User.objects.create_user(username="")
 
+    def test_invalid_username(self):
+        with self.assertRaisesMessage(
+            ValueError,
+            "Enter a valid username. This value may contain only letters, "
+            "numbers, and @/./+/-/_ characters."
+        ):
+            User.objects.create_user(username="test invalid")
+
     def test_create_user_is_staff(self):
         email = "normal@normal.com"
         user = User.objects.create_user("user", email, is_staff=True)

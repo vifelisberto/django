@@ -136,6 +136,7 @@ class Group(models.Model):
 
 class UserManager(BaseUserManager):
     use_in_migrations = True
+    username_validator = UnicodeUsernameValidator()
 
     def _create_user(self, username, email, password, **extra_fields):
         """
@@ -143,6 +144,10 @@ class UserManager(BaseUserManager):
         """
         if not username:
             raise ValueError("The given username must be set")
+        
+        # Username validation to not allow illegal characters
+        username_validator(username)
+
         email = self.normalize_email(email)
         # Lookup the real model class from the global app registry so this
         # manager method can be used in migrations. This is fine because
